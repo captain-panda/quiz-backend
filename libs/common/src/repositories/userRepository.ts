@@ -26,7 +26,7 @@ export class UserRepository {
     try {
       return this.userModel.findOne({
         username: username
-      })
+      }).lean()
     } catch (err) {
       console.log(`UserRepository.findUser : Error - ${JSON.stringify(err)}`)
       throw err

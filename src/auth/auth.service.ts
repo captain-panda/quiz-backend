@@ -19,7 +19,7 @@ export class AuthService {
   async login(username: string, password: string): Promise<string> {
     const user = await this.userRepository.findUser(username)
     if (user && await bcryptjs.compare(password, user.password)) {
-      return this.jwtService.sign({ username });
+      return this.jwtService.sign({ username }, { secret: process.env.JWT_SECRET });
     }
     return null;
   }
