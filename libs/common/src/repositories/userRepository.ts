@@ -9,4 +9,27 @@ export class UserRepository {
     @InjectModel(User.name)
     private readonly userModel: Model<User>
   ) { }
+
+  async addUser(username: string, hashedPassword: string): Promise<User> {
+    try {
+      return this.userModel.create({
+        username: username,
+        password: hashedPassword
+      })
+    } catch (err) {
+      console.log(`UserRepository.addUser : Error - ${JSON.stringify(err)}`)
+      throw err
+    }
+  }
+
+  async findUser(username: string) {
+    try {
+      return this.userModel.findOne({
+        username: username
+      })
+    } catch (err) {
+      console.log(`UserRepository.findUser : Error - ${JSON.stringify(err)}`)
+      throw err
+    }
+  }
 }
