@@ -10,10 +10,10 @@ export class QuizRepository {
     private readonly quizModel: Model<Quiz>
   ) { }
 
-  async getQuizById(gameId: string): Promise<Quiz> {
+  async getQuizById(quizId: string): Promise<Quiz> {
     try {
-      return this.quizModel.find({
-        _id: new Types.ObjectId(gameId)
+      return this.quizModel.findOne({
+        _id: new Types.ObjectId(quizId)
       }).lean()
     } catch (err) {
       console.log(`QuizRepository.getQuizById : Error - ${JSON.stringify(err)}`)
@@ -61,7 +61,7 @@ export class QuizRepository {
   async endQuiz(quizId: Types.ObjectId, winner?: Types.ObjectId): Promise<Quiz> {
     try {
       if (winner == undefined) {
-        return this.quizModel.updateOne({
+        await this.quizModel.updateOne({
           _id: quizId
         }, {
           $set: {
@@ -70,7 +70,7 @@ export class QuizRepository {
           }
         }).lean()
       } else {
-        return this.quizModel.updateOne({
+        await this.quizModel.updateOne({
           _id: quizId
         }, {
           $set: {
@@ -80,6 +80,7 @@ export class QuizRepository {
           }
         }).lean()
       }
+      return this.quizModel.findOne({ _id: quizId }).lean()
     } catch (err) {
       console.log(`QuizRepository.endQuiz : Error - ${JSON.stringify(err)}`)
       throw err

@@ -1,4 +1,4 @@
-import { QuestionRepository, Quiz, QuizRepository } from '@app/common';
+import { Question, QuestionRepository, Quiz, QuizRepository } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 
@@ -44,8 +44,8 @@ export class QuizService {
       for (const question of quiz.questions) {
         const questionData = questions.find((_q) => _q._id.toString() == question.questionId.toString())
 
-        if (questionData.correctAnswer == question.player1Answer) player1Score += questionData.marks
-        if (questionData.correctAnswer == question.player2Answer) player2Score += questionData.marks
+        if (question.player1Answer && questionData.correctAnswer == question.player1Answer) player1Score += questionData.marks
+        if (question.player2Answer && questionData.correctAnswer == question.player2Answer) player2Score += questionData.marks
       }
 
       if (player1Score > player2Score) {
@@ -66,6 +66,16 @@ export class QuizService {
       return this.quizRepository.getQuizById(quizId)
     } catch (err) {
       console.log(`QuizService.findQuizById : Error - ${JSON.stringify(err)}`)
+      throw err
+    }
+  }
+
+  async getQuestion(questionId: Types.ObjectId): Promise<Question> {
+    try {
+      const question = await this.questionRepository.getQuestionsByIds([questionId])
+      return question[0]
+    } catch (err) {
+      console.log(`QuizService.getQuestion : Error - ${JSON.stringify(err)}`)
       throw err
     }
   }

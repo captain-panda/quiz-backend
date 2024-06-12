@@ -16,7 +16,7 @@ export class QuizController {
   }
 
   @Post('end/:id')
-  async endquiz(@Param('id') quizId: string) {
+  async endquiz(@Param('quizId') quizId: string) {
     try {
       return this.quizService.endQuiz(quizId);
     } catch (err) {
