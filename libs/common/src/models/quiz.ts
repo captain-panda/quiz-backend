@@ -15,7 +15,7 @@ export class Result {
   isDraw?: boolean
 }
 
-@Schema()
+@Schema({ collection: 'quizzes' })
 export class Quiz {
   _id?: Types.ObjectId;
 
