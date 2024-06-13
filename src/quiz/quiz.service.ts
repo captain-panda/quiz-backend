@@ -1,4 +1,4 @@
-import { Question, QuestionRepository, Quiz, QuizRepository } from '@app/common';
+import { Question, QuestionRepository, Quiz, QuizRepository, UserRepository } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 
@@ -6,11 +6,16 @@ import { Types } from 'mongoose';
 export class QuizService {
   constructor(
     private readonly quizRepository: QuizRepository,
-    private readonly questionRepository: QuestionRepository
+    private readonly questionRepository: QuestionRepository,
+    private readonly userRepository: UserRepository
   ) { }
 
   async startQuiz(player1Id: string, player2Id: string): Promise<Quiz> {
     try {
+      const players = await this.userRepository.getUserByIds([player1Id, player2Id])
+      if (players.length < 2) {
+        return null
+      }
       const questions = await this.questionRepository.getQuestions()
       const quizDoc = {
         player1: new Types.ObjectId(player1Id),
