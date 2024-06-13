@@ -43,6 +43,7 @@ export class QuizService {
   async endQuiz(quizId: string): Promise<Quiz> {
     try {
       const quiz = await this.quizRepository.getQuizById(quizId);
+      if (!quiz) return null
       const questions = await this.questionRepository.getQuestionsByIds(quiz.questions.map((question) => question.questionId))
       let player1Score = 0, player2Score = 0
 

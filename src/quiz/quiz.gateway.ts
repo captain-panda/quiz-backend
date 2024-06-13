@@ -16,6 +16,7 @@ export class QuizGateway {
   async handleQuizInit(@MessageBody() body) {
     try {
       const quiz = await this.quizService.findQuizById(body.quizId);
+      if (!quiz) return null
       const question = await this.quizService.getQuestion(quiz.questions[0].questionId)
       const quizData = {
         player1: quiz.player1,
@@ -39,6 +40,7 @@ export class QuizGateway {
   async handleQuestionSend(@MessageBody() body: { quizId: string, currentQuestionId: string }, @ConnectedSocket() client: Socket) {
     try {
       const quiz = await this.quizService.findQuizById(body.quizId);
+      if (!quiz) return null
       const currentQuestionIndex = quiz.questions.findIndex(q => q.questionId.toString() === body.currentQuestionId);
 
       if (currentQuestionIndex == quiz.questions.length - 1) {
