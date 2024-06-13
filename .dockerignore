@@ -1,0 +1,7 @@
+src
+.env.example
+.gitignore
+node_modules
+Dockerfile
+nest-cli.json
+README.md

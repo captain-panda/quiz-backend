@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: nestjs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8090:8090
+    environment:
+      - PORT=8090
+      - JWT_SECRET=erwfe
+      - QUIZ_DB_CONNECTION=mongodb://host.docker.internal:27017/quiz-db
+    restart: unless-stopped
